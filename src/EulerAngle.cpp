@@ -1,0 +1,91 @@
+/// \file EulerAngle.cpp
+/// \date 2008/04/16
+/// \author Peter Dodds
+/// \brief CGM::EulerAngle function definitions
+/// \note Copyright (C) 2008 - All Rights Reserved
+//------------------------------------------------------------------------------
+
+#include "EulerAngle.hpp"
+#include "Quaternion.hpp"
+#include "Matrix.hpp"
+
+namespace CGM
+{
+  //------------------------------------------------ EulerAngle::EulerAngle
+  EulerAngle::EulerAngle( const Real& _x /*= 0*/, const Real& _y /*= 0*/, const Real& _z /*= 0*/ ) : x (_x), y (_y), z (_z)
+  {
+
+  }
+
+  //------------------------------------------------ EulerAngle::EulerAngle
+  EulerAngle::EulerAngle( const EulerAngle& ea ) : x (ea.x), y (ea.y), z (ea.z)
+  {
+
+  }
+
+  //------------------------------------------------ EulerAngle::EulerAngle
+  EulerAngle::EulerAngle( const Matrix& m )
+  {
+    FromMatrix(m);
+  }
+
+  //------------------------------------------------ EulerAngle::EulerAngle
+  EulerAngle::EulerAngle( const Quaternion& q )
+  {
+    FromMatrix(q.ToMatrix());
+  }
+
+  //------------------------------------------------ EulerAngle::operator=
+  const EulerAngle& EulerAngle::operator=( const EulerAngle& ea )
+  {
+    x = ea.x; y = ea.y; z = ea.z;
+    return *this;
+  }
+
+  //------------------------------------------------ EulerAngle::FromMatrix
+  const EulerAngle& EulerAngle::FromMatrix( const Matrix& m )
+  {
+    // http://vered.rose.utoronto.ca/people/david_dir/GEMS/GEMS.html
+    // assuming that angle is in static XYZ order
+    CGM::Real cy = CGM_SQRT(m.m00*m.m00 + m.m10*m.m10);
+    if (cy > 16*0.00001) {
+      x = CGM_ATAN2(m.m21, m.m22);
+      y = CGM_ATAN2(-m.m20, cy);
+      z = CGM_ATAN2(m.m10, m.m00);
+    } else {
+      x = CGM_ATAN2(-m.m12, m.m11);
+      y = CGM_ATAN2(-m.m20, cy);
+      z = 0;
+    }
+    return *this;
+  }
+
+  //------------------------------------------------ EulerAngle::FromQuat
+  const EulerAngle& EulerAngle::FromQuat( const Quaternion& q )
+  {
+    return FromMatrix(q.ToMatrix());
+  }
+
+  //------------------------------------------------ EulerAngle::ToQuat
+  CGM::Quaternion EulerAngle::ToQuat()
+  {
+    // http://vered.rose.utoronto.ca/people/david_dir/GEMS/GEMS.html
+    // assuming that angle is in static XYZ order
+    Quaternion q;
+    Real ti, tj, th, ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
+    
+    ti = x*0.5; tj = y*0.5; th = z*0.5;
+    
+    ci = CGM_COS(ti);  cj = CGM_COS(tj);  ch = CGM_COS(th);
+    si = CGM_SIN(ti);  sj = CGM_SIN(tj);  sh = CGM_SIN(th);
+    
+    cc = ci*ch; cs = ci*sh; sc = si*ch; ss = si*sh;
+    
+    q.x = cj*sc - sj*cs;
+    q.y = cj*ss + sj*cc;
+    q.z = cj*cs - sj*sc;
+    q.w = cj*cc + sj*ss;
+
+    return q;
+  }
+}
