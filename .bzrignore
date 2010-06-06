@@ -1,0 +1,6 @@
+*.vcproj.*
+*.suo
+*.sln
+*.ncb
+lib/*CGMath*
+obj

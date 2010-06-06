@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="MCG"
+	Name="CGMath"
 	ProjectGUID="{AA3ACDC1-3480-43EF-BB4B-73B20FA58081}"
 	RootNamespace="MCG"
 	Keyword="Win32Proj"
@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="./lib"
+			IntermediateDirectory="./obj/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".."
+				AdditionalIncludeDirectories="./include/CGM;./include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalLibraryDirectories="../../lib"
+				AdditionalLibraryDirectories="./lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -81,8 +81,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../lib"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="./lib"
+			IntermediateDirectory="./obj/$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -104,7 +104,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".."
+				AdditionalIncludeDirectories="./include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -123,7 +123,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalLibraryDirectories="../../lib"
+				AdditionalLibraryDirectories="./lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -151,31 +151,31 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\EulerAngle.cpp"
+				RelativePath=".\src\EulerAngle.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Matrix.cpp"
+				RelativePath=".\src\Matrix.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Quaternion.cpp"
+				RelativePath=".\src\Quaternion.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Utl.cpp"
+				RelativePath=".\src\Utl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector2.cpp"
+				RelativePath=".\src\Vector2.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector3.cpp"
+				RelativePath=".\src\Vector3.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector4.cpp"
+				RelativePath=".\src\Vector4.cpp"
 				>
 			</File>
 		</Filter>
@@ -185,35 +185,35 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Def.h"
+				RelativePath=".\include\CGM\Def.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\EulerAngle.h"
+				RelativePath=".\include\CGM\EulerAngle.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Matrix.h"
+				RelativePath=".\include\CGM\Matrix.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Quaternion.h"
+				RelativePath=".\include\CGM\Quaternion.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Utl.h"
+				RelativePath=".\include\CGM\Utl.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector2.h"
+				RelativePath=".\include\CGM\Vector2.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector3.h"
+				RelativePath=".\include\CGM\Vector3.hpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Vector4.h"
+				RelativePath=".\include\CGM\Vector4.hpp"
 				>
 			</File>
 		</Filter>
