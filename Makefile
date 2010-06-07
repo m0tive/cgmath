@@ -1,67 +1,74 @@
-NAME := MCG
-BUILD := debug
-COMPILER := g++
-#DOXYGEN := Doxyfile
+SHELL = /bin/sh
+NAME ?= libCGMath
 
-FLAGS := -Wall
-DEFINES := -DUNIX -DLINUX
+srcdir = .
 
-#INCDIR := 
-SRCDIR := .
-OUTDIR := .
+cppdir ?= $(srcdir)/src
+hppdir ?= $(srcdir)/include/CGM
+objdir ?= $(srcdir)/obj
+outdir ?= $(srcdir)/lib
 
-LIBS := 
 
-#INCLUDE := -I$(INCDIR)
+SRC := $(notdir $(wildcard $(cppdir)/*.cpp))
+OBJ := $(SRC:cpp=o)
 
-ifeq "$(BUILD)" "debug"
+CPPFLAGS += -DUNIX -DLINUX
 
-FLAGS += -g
-DEFINES += -D_DEBUG
-LIBS +=
-OBJDIR := obj/Debug
-TARGET := lib$(NAME).a
+CXXFLAGS += -I$(hppdir)
+CXXFLAGS += -Wall
 
-else
+DEBUGFLAGS = -g -D_DEBUG
+RELEASEFLAGS = -DNDEBUG
 
-FLAGS +=
-DEFINES += 
-LIBS +=
-OBJDIR := obj/Release
-TARGET := lib$(NAME).a
 
-endif
+default: debug
+	$(info Choose a build: [ debug, release ])
+	@exit 0
 
-$(shell if ! [ -d $(OUTDIR) ] ; then mkdir -p $(OUTDIR); fi)
-$(shell if ! [ -d $(OBJDIR) ] ; then mkdir -p $(OBJDIR); fi)
-$(shell if ! [ -d .kate ] ; then mkdir .kate; fi)
 
-FILES := $(shell ls *.cpp)
+debug: $(outdir) $(objdir)/debug $(outdir)/$(NAME)-debug.a
 
-OBJECTS:= $(addprefix $(OBJDIR)/, $(FILES:.cpp=.o))
+%-debug.a : $(addprefix $(objdir)/debug/, $(OBJ))
+	$(AR) $(ARFLAGS) $@ $^
 
-## create all
-all : $(OUTDIR)/$(TARGET)
+$(objdir)/debug/%.o : $(cppdir)/%.cpp $(wildcard $(hppdir)/*.hpp)
+	@echo dep $(addprefix $(hppdir)/, $(shell cat $< | grep -o [^\"]*hpp))
+	$(CXX) -c $(DEBUGFLAGS) $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
 
-## Archive the object files
-$(OUTDIR)/$(TARGET): $(OBJECTS)
-	ar rcs $(OUTDIR)/$(TARGET) $(OBJECTS)
 
-## Compile the object files
-$(OBJECTS): $(OBJDIR)/%.o: %.cpp
-	$(COMPILER) -c $(FLAGS) $(DEFINES) $< -o $@
-	
-## Remove extra stuff
-clean :
-	rm -f $(OUTDIR)/$(TARGET)
-	rm -f $(OBJECTS)
-	
-kate_clean :
-	mv -f ./*~ .kate/.
+all: release check
 
-ifdef DOXYGEN
+release: $(outdir) $(objdir)/release $(outdir)/$(NAME).a
 
-doxygen :
-	doxygen $(DOXYGEN)
-	
-endif	
+%$(NAME).a : $(addprefix $(objdir)/release/, $(OBJ))
+	$(AR) $(ARFLAGS) $@ $^
+
+$(objdir)/release/%.o : $(cppdir)/%.cpp
+	$(CXX) -c $(RELEASEFLAGS) $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
+
+
+$(objdir)/debug : $(objdir)
+	-mkdir $@
+
+$(objdir)/release : $(objdir)
+	-mkdir $@
+
+$(objdir) :
+	-mkdir $@
+
+$(outdir) :
+	-mkdir $@
+
+.PRECIOUS : $(objdir)/debug/%.o $(objdir)/release/%.o
+
+TAGS:
+	ctags -VR --languages=C++ $(cppdir) $(hppdir)
+
+clean:
+	$(RM) -v $(outdir)/$(NAME).a $(outdir)/$(NAME)-debug.a $(addprefix $(objdir)/debug/, $(OBJ)) $(addprefix $(objdir)/release/, $(OBJ))
+
+check:
+	@echo run unit test
+
+.PONEY : default debug release clean TAGS
+

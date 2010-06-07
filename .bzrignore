@@ -4,3 +4,4 @@
 *.ncb
 lib/*CGMath*
 obj
+tags
