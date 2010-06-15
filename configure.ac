@@ -1,0 +1,15 @@
+AC_INIT([CGMath], [0.1], [peter@pddds.com])
+AC_PREREQ([2.65])
+AM_INIT_AUTOMAKE([1.11 no-define dist-bzip2 -Wall])
+
+AC_CONFIG_HEADERS([config.h])
+AC_PROG_CXX
+
+LT_INIT
+
+AC_SUBST([CGMATH_SO_VERSION], [0:0:0])
+AC_SUBST([CGMATH_API_VERSION], [0.0])
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
